@@ -1,0 +1,57 @@
+#asiganr variable
+set var4 55
+set var88 casa
+
+set variable1
+
+#mostrar variable en pantalla
+puts $car4
+
+#prueba Expresiones
+set c3 [expr $a3 + $b4]
+
+#Prueba estructura if
+if {$x3 == 2} {puts $car6} else {set var8 66}
+
+#Prueba 2 estructura if
+if {$x4 >= 1} {
+puts $car4d
+} else {
+puts $car4s
+}
+
+
+
+#prueba Sentencia selectiva switch
+switch $x2 {
+"$z2" {
+set y14 [expr $y4+$y1]
+}
+ONE {
+set y14 [expr $y4+$y1]
+}
+TWO {
+set y14 [expr $y4+$y1]
+}
+THREE {
+set y14 [expr $y4+$y1]
+}
+default {
+set y14 [expr $y4+$y1]
+}
+}
+#prueba Sentencia repetitiva while
+while {$x5 < 5} {
+puts $dd4
+set x5 [expr $xd4 + $d1]
+}
+#prueba Sentencia selectiva for
+for {set i8 0} {$i8 < 10} {incr i8} {
+puts $dd4
+set x5 [expr $xd4 + $d1]
+}
+#prueba procedimiento
+proc sum {arg1 arg2} {
+set x4 [expr $arg1 + $arg2]
+return $x4
+}

@@ -1,0 +1,147 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Linea, If, Then, While, Igual, Suma, Resta, Multiplicacion, Division,
+         Menor, Set, Puts, Llave_a, Llave_c, Corchete_a, Expr, Exponente, Porcentaje,
+        Corchete_c, P_coma, Identificador, Numero, Comillas, Dolar, Cadena,
+        Mayor, Menor_igual, Mayor_igual,Igual_que,No_igual_que,Listado_si,
+        Listado_no, Elseif, Else, Op_booleano, And, Or, Not,Switch,Default,
+        Continue, Break,For, Proc, Return, Incr, ERROR;
+
+non terminal INICIO, ASIGNARVAL, DECLARACION, IF, ESTRUCTURAS, VERVALOR, MOSTRARVAL,
+    EJECUTAREXPR, ESTRUCTURAIF, WHILE, AGRUPARPA, AGRUPAR_PAL, EXPVAR, ESTRUCTURASWITCH,
+    ESTRUCTURAWHILE,  TESTWHILE, TESTIF, STARTFOR, TESTFOR, NEXTFOR, ESTRUCTURAFOR,
+    PROCEDIMIENTO, ARG; 
+
+start with INICIO;
+
+INICIO ::=  ESTRUCTURAS
+;
+//------------------------------------------------------------------------------
+ESTRUCTURAS ::=
+    ESTRUCTURAS ASIGNARVAL | ASIGNARVAL |
+    ESTRUCTURAS VERVALOR | VERVALOR |
+    ESTRUCTURAS MOSTRARVAL | MOSTRARVAL |
+    ESTRUCTURAS EJECUTAREXPR | EJECUTAREXPR |
+    ESTRUCTURAS ESTRUCTURAIF | ESTRUCTURAIF |
+    ESTRUCTURAS AGRUPAR_PAL | AGRUPAR_PAL |
+    ESTRUCTURAS EXPVAR | EXPVAR |
+    ESTRUCTURAS ESTRUCTURASWITCH | ESTRUCTURASWITCH |
+    ESTRUCTURAS ESTRUCTURAWHILE | ESTRUCTURAWHILE |
+    ESTRUCTURAS ESTRUCTURAFOR | ESTRUCTURAFOR |
+    ESTRUCTURAS PROCEDIMIENTO | PROCEDIMIENTO
+;
+//------------------------------------------------------------------------------
+//---------------------Asignar valor a una variable-----------------------------
+ASIGNARVAL ::= Set Identificador Numero | Set Identificador Cadena
+;
+//------------------------------------------------------------------------------
+//------------------Ver el dato almacenado en la variable-----------------------
+VERVALOR ::= Set Identificador
+;
+//------------------------------------------------------------------------------
+//---------------------------Escribir en pantalla-------------------------------
+MOSTRARVAL ::= 
+    Puts Dolar Identificador 
+;
+//------------------------------------------------------------------------------
+//---------------------------Agrupar palabras-----------------------------------
+AGRUPAR_PAL ::= 
+    Comillas Cadena Comillas |
+    Comillas Cadena EXPVAR Comillas |
+    Puts Comillas EXPVAR Cadena Numero Comillas |
+    Puts Comillas Cadena ESTRUCTURAS Comillas |
+    Puts Comillas Cadena EXPVAR Suma Cadena EXPVAR Comillas 
+;
+//------------------------------------------------------------------------------
+//-----------------------------Expresiones--------------------------------------
+EXPVAR ::= Dolar Identificador;
+EJECUTAREXPR ::= 
+    Set Identificador Corchete_a Expr EXPVAR Suma EXPVAR Corchete_c |
+    Set Identificador Corchete_a Expr EXPVAR Resta EXPVAR Corchete_c |
+    Set Identificador Corchete_a Expr EXPVAR Multiplicacion EXPVAR Corchete_c |
+    Set Identificador Corchete_a Expr EXPVAR Division EXPVAR Corchete_c 
+;
+//------------------------------------------------------------------------------
+//------------------------------condicional if----------------------------------
+TESTIF ::=
+    Llave_a EXPVAR Igual Numero Llave_c |
+    Llave_a EXPVAR Igual Cadena Llave_c |
+    Llave_a EXPVAR Mayor Numero Llave_c |
+    Llave_a EXPVAR Menor Numero Llave_c |
+    Llave_a EXPVAR Mayor_igual Numero Llave_c |
+    Llave_a EXPVAR Menor_igual Numero Llave_c 
+;
+ESTRUCTURAIF ::= 
+    If TESTIF Llave_a ESTRUCTURAS Llave_c Else Llave_a ESTRUCTURAS Llave_c |
+    If TESTIF Then Llave_a ESTRUCTURAS Llave_c Else Llave_a ESTRUCTURAS Llave_c 
+; 
+//------------------------------------------------------------------------------
+//----------------------Sentencia selectiva switch------------------------------
+ESTRUCTURASWITCH ::=
+    Switch EXPVAR Llave_a Comillas EXPVAR Comillas Llave_a ESTRUCTURAS Llave_c
+    Cadena Llave_a ESTRUCTURAS Llave_c
+    Cadena Llave_a ESTRUCTURAS Llave_c
+    Cadena Llave_a ESTRUCTURAS Llave_c
+    Default Llave_a ESTRUCTURAS Llave_c Llave_c
+;
+//------------------------------------------------------------------------------
+//----------------------Sentencia repetitiva While------------------------------
+TESTWHILE ::=
+    Llave_a EXPVAR Igual Numero Llave_c |
+    Llave_a EXPVAR Igual Cadena Llave_c |
+    Llave_a EXPVAR Mayor Numero Llave_c |
+    Llave_a EXPVAR Menor Numero Llave_c |
+    Llave_a EXPVAR Mayor_igual Numero Llave_c |
+    Llave_a EXPVAR Menor_igual Numero Llave_c 
+;
+ESTRUCTURAWHILE ::= 
+    While TESTWHILE Llave_a ESTRUCTURAS Llave_c |
+    While TESTWHILE Llave_a ESTRUCTURAS Continue Llave_c |
+    While TESTWHILE Llave_a ESTRUCTURAS Break Llave_c 
+;
+//------------------------------------------------------------------------------
+//------------------------Sentencia repetitiva for------------------------------
+STARTFOR ::=
+    Llave_a Set Identificador Numero Llave_c
+;
+TESTFOR ::=
+    Llave_a EXPVAR Igual Numero Llave_c |
+    Llave_a EXPVAR Mayor Numero Llave_c |
+    Llave_a EXPVAR Menor Numero Llave_c |
+    Llave_a EXPVAR Mayor_igual Numero Llave_c |
+    Llave_a EXPVAR Menor_igual Numero Llave_c 
+;
+NEXTFOR ::=
+    Llave_a Incr Identificador Llave_c
+;
+ESTRUCTURAFOR ::=
+    For STARTFOR TESTFOR NEXTFOR Llave_a ESTRUCTURAS Llave_c |
+    For STARTFOR TESTFOR NEXTFOR Llave_a ESTRUCTURAS Continue Llave_c |
+    For STARTFOR TESTFOR NEXTFOR Llave_a ESTRUCTURAS Break Llave_c
+;
+//------------------------------------------------------------------------------
+//-------------------------------Procedimientos---------------------------------
+ARG ::= 
+    Llave_a Identificador Llave_c |
+    Llave_a Identificador Identificador Llave_c
+;
+PROCEDIMIENTO ::=
+    Proc Cadena ARG Llave_a ESTRUCTURAS 
+    Return EXPVAR
+    Llave_c
+;

@@ -74,8 +74,15 @@ ni {return Listado_no;}
 (true | false)      {lexeme = yytext(); return Op_booleano;}
 
 
-( ";" ) {lexeme=yytext(); return P_coma;}
+//palabras
 {Letra}{Letra}* {lexeme=yytext(); return Cadena;}
+//Identifiadores
 {Letra}({Letra}|{Digito}|GUION_B)* {lexeme=yytext(); return Identificador;}
+//Numeros
 ("(-"{Digito}+")")|{Digito}+ {lexeme=yytext(); return Numero;}
+
+//Punto y coma
+( ";" ) {lexeme=yytext(); return P_coma;}
+
+//Errores
  . {return ERROR;}

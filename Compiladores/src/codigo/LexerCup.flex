@@ -39,6 +39,8 @@ espacio_cadena=[ ]
 ( return )    {return new Symbol(sym.Return, yychar, yyline, yytext());}
 ( incr )    {return new Symbol(sym.Incr, yychar, yyline, yytext());}
 
+( "$" ) {return new Symbol(sym.Dolar, yychar, yyline, yytext());}
+
 //comentarios,espacio en blanco
 {espacio} {/*Ignore*/} 
 "#".* {/*Ignore*/}
@@ -63,6 +65,13 @@ espacio_cadena=[ ]
 "||" {return new Symbol(sym.Or, yychar, yyline, yytext());}
 "!"  {return new Symbol(sym.Not, yychar, yyline, yytext());}
 
+//Simbolos de Agrupacion
+( "{" ) {return new Symbol(sym.Llave_a, yychar, yyline, yytext());}
+( "}" ) {return new Symbol(sym.Llave_c, yychar, yyline, yytext());}
+( "[" ) {return new Symbol(sym.Corchete_a, yychar, yyline, yytext());}
+( "]" ) {return new Symbol(sym.Corchete_c, yychar, yyline, yytext());}
+( "\"" ) {return new Symbol(sym.Comillas, yychar, yyline, yytext());}
+
 //Operadores Relacionales para cadenas
 eq {return new Symbol(sym.Igual_que, yychar, yyline, yytext());}
 ne {return new Symbol(sym.No_igual_que, yychar, yyline, yytext());}
@@ -72,34 +81,17 @@ ni {return new Symbol(sym.Listado_no, yychar, yyline, yytext());}
 //Operador Booleano
 (true | false)      {return new Symbol(sym.Op_booleano, yychar, yyline, yytext());}
 
+//Palabras
 {Letra}{Letra}* {return new Symbol(sym.Cadena, yychar, yyline, yytext());}
+//Identificadores
 {Letra}({Letra}|{Digito}|GUION_B)*   {return new Symbol(sym.Identificador, yychar, yyline, yytext());}
+//Numero
 ("(-"{Digito}+")")|{Digito}+  {return new Symbol(sym.Numero, yychar, yyline, yytext());}
 
-/* Llave de apertura */
-( "{" ) {return new Symbol(sym.Llave_a, yychar, yyline, yytext());}
 
-/* Llave de cierre */
-( "}" ) {return new Symbol(sym.Llave_c, yychar, yyline, yytext());}
-
-/* Corchete de apertura */
-( "[" ) {return new Symbol(sym.Corchete_a, yychar, yyline, yytext());}
-
-
-
-/* Corchete de cierre */
-( "]" ) {return new Symbol(sym.Corchete_c, yychar, yyline, yytext());}
-
-/* Marcador de inicio de algoritmo */
-( "main" ) {return new Symbol(sym.Main, yychar, yyline, yytext());}
-
-/* Comillas */
-( "\"" ) {return new Symbol(sym.Comillas, yychar, yyline, yytext());}
-
-/* Dolar */
-( "$" ) {return new Symbol(sym.Dolar, yychar, yyline, yytext());}
-
-/* Punto y coma */
+//Punto y coma
 ( ";" ) {return new Symbol(sym.P_coma, yychar, yyline, yytext());}
+
+//Errores
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}
 

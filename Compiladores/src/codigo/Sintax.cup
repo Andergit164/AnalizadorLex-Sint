@@ -69,7 +69,8 @@ AGRUPAR_PAL ::=
 ;
 //------------------------------------------------------------------------------
 //-----------------------------Expresiones--------------------------------------
-EXPVAR ::= Dolar Identificador;
+EXPVAR ::= Dolar Identificador
+;
 EJECUTAREXPR ::= 
     Set Identificador Corchete_a Expr EXPVAR Suma EXPVAR Corchete_c |
     Set Identificador Corchete_a Expr EXPVAR Resta EXPVAR Corchete_c |
